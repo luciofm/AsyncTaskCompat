@@ -31,7 +31,6 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import android.content.res.Resources.Theme;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
@@ -543,7 +542,7 @@ public abstract class AsyncTaskCompat<Params, Progress, Result> {
      * Executes the task with the specified parameters. The task returns
      * itself (this) so that the caller can keep a reference to it.
      * 
-     * <p>Note: this function schedules the task to run in paralel with another
+     * <p>Note: this function schedules the task to run in parallel with another
      * tasks using the {@link #THREAD_POOL_EXECUTOR};.
      *
      * <p><em>Warning:</em> Allowing multiple tasks to run in parallel from
@@ -569,7 +568,7 @@ public abstract class AsyncTaskCompat<Params, Progress, Result> {
      * @see #executeOnExecutor(java.util.concurrent.Executor, Object[])
      * @see #execute(Runnable)
      */
-    public final AsyncTaskCompat<Params, Progress, Result> executeSerially(Params... params) {
+    public final AsyncTaskCompat<Params, Progress, Result> executePararelly(Params... params) {
         return executeOnExecutor(THREAD_POOL_EXECUTOR, params);
     }
 
