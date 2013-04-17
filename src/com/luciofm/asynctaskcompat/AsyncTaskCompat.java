@@ -31,6 +31,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import android.content.res.Resources.Theme;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Process;
@@ -542,6 +543,40 @@ public abstract class AsyncTaskCompat<Params, Progress, Result> {
      * Executes the task with the specified parameters. The task returns
      * itself (this) so that the caller can keep a reference to it.
      * 
+     * <p>Note: this function schedules the task to run in paralel with another
+     * tasks using the {@link #THREAD_POOL_EXECUTOR};.
+     *
+     * <p><em>Warning:</em> Allowing multiple tasks to run in parallel from
+     * a thread pool is generally <em>not</em> what one wants, because the order
+     * of their operation is not defined.  For example, if these tasks are used
+     * to modify any state in common (such as writing a file due to a button click),
+     * there are no guarantees on the order of the modifications.
+     * Without careful work it is possible in rare cases for the newer version
+     * of the data to be over-written by an older one, leading to obscure data
+     * loss and stability issues.  Such changes are best
+     * executed in serial; to guarantee such work is serialized regardless of
+     * platform version you can use the {@link #execute} version of this method
+     *
+     * <p>This method must be invoked on the UI thread.
+     *
+     * @param params The parameters of the task.
+     *
+     * @return This instance of AsyncTaskCompat.
+     *
+     * @throws IllegalStateException If {@link #getStatus()} returns either
+     *         {@link AsyncTaskCompat.Status#RUNNING} or {@link AsyncTaskCompat.Status#FINISHED}.
+     *
+     * @see #executeOnExecutor(java.util.concurrent.Executor, Object[])
+     * @see #execute(Runnable)
+     */
+    public final AsyncTaskCompat<Params, Progress, Result> executeSerially(Params... params) {
+        return executeOnExecutor(THREAD_POOL_EXECUTOR, params);
+    }
+
+    /**
+     * Executes the task with the specified parameters. The task returns
+     * itself (this) so that the caller can keep a reference to it.
+     *
      * <p>This method is typically used with {@link #THREAD_POOL_EXECUTOR} to
      * allow multiple tasks to run in parallel on a pool of threads managed by
      * AsyncTaskCompat, however you can also use your own {@link Executor} for custom
