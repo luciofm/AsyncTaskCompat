@@ -568,7 +568,7 @@ public abstract class AsyncTaskCompat<Params, Progress, Result> {
      * @see #executeOnExecutor(java.util.concurrent.Executor, Object[])
      * @see #execute(Runnable)
      */
-    public final AsyncTaskCompat<Params, Progress, Result> executePararelly(Params... params) {
+    public final AsyncTaskCompat<Params, Progress, Result> executeParallely(Params... params) {
         return executeOnExecutor(THREAD_POOL_EXECUTOR, params);
     }
 
